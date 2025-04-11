@@ -8,7 +8,7 @@ zip_path_original = 'matrizes_tcc.zip'
 zip_path_suavizadas = 'matrizes_suavizadas_tcc.zip'
 
 matrizes = []
-matrizes_srm -rf .git  # ⚠️ Remove todo o histórico Git do repositóriouavizadas = []
+matrizes_suavizadas = []
 
 # Abrir matrizes originais
 with zipfile.ZipFile(zip_path_original, 'r') as zip_ref:
@@ -84,11 +84,12 @@ def exibir_imagens(originais, suavizadas, binarizadas):
 # 📐 Médias
 media_original = np.mean(matrizes[0])
 media = np.mean(matrizes_suavizadas[0])
+
 # 📉 Cálculo do desvio padrão das matrizes originais e suavizadas
 desvio_padrao_original = calcular_desvio_padrao(matrizes[0])
 desvio_padrao = calcular_desvio_padrao(matrizes_suavizadas[0])
 
-limiar = 5 * desvio_padrao + media  # ➤ Limiar para binarização (0 a 255)
+limiar = 6 * desvio_padrao + media  # ➤ Limiar para binarização (0 a 255)
 
 # ⬛ Binarização das matrizes suavizadas com base no limiar
 matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiar)
@@ -101,7 +102,7 @@ print(f"🎯 Desvio padrão da matriz suavizada: {desvio_padrao:.2f}")
 print(f"📊 Média da matriz original: {media_original:.2f}")
 print(f"📊 Média da matriz suavizada: {media:.2f}")
 
-print(f"📐 Limiar: 5*{desvio_padrao:.2f} + {media:.2f} = {limiar:.2f}")
+print(f"📐 Limiar: 6*{desvio_padrao:.2f} + {media:.2f} = {limiar:.2f}")
 
 # 📊 Plot: histograma da matriz suavizada
 exibir_histograma(matrizes_suavizadas[0])
