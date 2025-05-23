@@ -11,9 +11,8 @@ num_camadas_ocultas = 2         # Número de camadas ocultas
 neuronios_ocultos = 256         # Número de neurônios por camada oculta
 num_epochs = 10                 # Número de treinamentos
 limiar_alvo = 180               # Limiar de intensidade média para rotular como alvo
-# Taxa de aprendizado (quanto a rede ajusta os pesos)
-taxa_aprendizado = 0.01
-arquivo_matrizes = "matrizes_suavizadas_tcc.npy"
+taxa_aprendizado = 0.01         # Taxa de aprendizado (quanto a rede ajusta os pesos)
+arquivo_matrizes = "matrizes_reduzidas_tcc.npy"
 
 ##############################################
 # Função de ativação e derivada (Sigmoid)

@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 import zipfile
+import os
 
 zip_path_original = 'matrizes_tcc.zip'
 zip_path_suavizadas = 'matrizes_suavizadas_tcc.zip'
@@ -127,6 +128,22 @@ def exibir_imagens(original, suavizada, binarizada, reduzida):
     plt.tight_layout()
     plt.show()
 
+
+##################################
+# Salvar matrizes em .npy
+##################################
+def salvar_matrizes(nome_arquivo, matrizes):
+    np.save(nome_arquivo, np.array(matrizes))
+    print(f"Matrizes salvas em {nome_arquivo}")
+
+##################################
+# Compactar em zip
+##################################
+def compactar_npy(nome_arquivo_npy, nome_zip):
+    with zipfile.ZipFile(nome_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        zipf.write(nome_arquivo_npy)
+    print(f"Arquivo compactado salvo como {nome_zip}")
+
 ##############################################
 # PROCESSAMENTO DAS IMAGENS
 ##############################################
@@ -172,3 +189,22 @@ exibir_histograma(matrizes[0], matrizes_suavizadas[0])
 '''
 # 📊 Plot: imagem original, suavizada, binarizada e reduzida
 exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0], matrizes_reduzidas[0])
+
+
+
+# 💾 Salvamento das matrizes binarizadas em arquivo .npy
+npy_path_binarizadas = "matrizes_binarizadas_tcc.npy"
+zip_path_binarizadas = "matrizes_binarizadas_tcc.zip"
+
+salvar_matrizes(npy_path_binarizadas, matrizes_binarizadas)
+compactar_npy(npy_path_binarizadas, zip_path_binarizadas)
+os.remove(npy_path_binarizadas)
+
+
+# 💾 Salvamento das matrizes reduzidas em arquivo .npy
+npy_path_reduzidas = "matrizes_reduzidas_tcc.npy"
+zip_path_reduzidas = "matrizes_reduzidas_tcc.zip"
+
+salvar_matrizes(npy_path_reduzidas, matrizes_reduzidas)
+compactar_npy(npy_path_reduzidas, zip_path_reduzidas)
+os.remove(npy_path_reduzidas)
