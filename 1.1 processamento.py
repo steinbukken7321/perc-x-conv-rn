@@ -5,6 +5,60 @@ from PIL import Image
 import zipfile
 import os
 
+"""
+🔹 Objetivo:
+Este código realiza o processamento de um conjunto de matrizes (imagens) armazenadas em arquivos `.npy` compactados em arquivos `.zip`. O processamento envolve análise estatística, binarização e redução das matrizes, além de visualização e salvamento dos resultados.
+
+🔹 Etapas do Processamento:
+
+1️⃣ **Carregamento das Matrizes**
+   - As matrizes são carregadas a partir de dois arquivos `.zip`:
+     - `matrizes_tcc.zip` → matrizes originais.
+     - `matrizes_suavizadas_tcc.zip` → matrizes suavizadas.
+   - Os arquivos `.npy` dentro dos `.zip` são extraídos e carregados como arrays NumPy.
+
+2️⃣ **Análise Estatística**
+   - Calcula-se:
+     - A média das intensidades dos pixels.
+     - O desvio padrão de duas formas:
+       🔸 Usando a função `np.std()`.
+       🔸 De forma manual, implementando o cálculo matemático do desvio padrão.
+   - Essa análise é feita para comparar a matriz original com a suavizada.
+
+3️⃣ **Exibição de Histogramas**
+   - Gera histogramas das distribuições de intensidade dos pixels das matrizes original e suavizada.
+   - Permite visualizar a dispersão dos valores e os efeitos da suavização.
+
+4️⃣ **Binarização das Matrizes**
+   - As matrizes suavizadas são transformadas em imagens binárias (preto e branco).
+   - Um **limiar (threshold)** é definido como:
+     ```
+     limiar = 6 * desvio_padrao + media
+     ```
+   - Pixels com valor maior ou igual ao limiar recebem o valor 255 (branco) e os demais recebem 0 (preto).
+
+5️⃣ **Redução das Matrizes (Compressão por Blocos)**
+   - As imagens binarizadas são reduzidas em resolução utilizando uma máscara de blocos.
+   - Para cada bloco (ex.: 2x2 pixels), calcula-se a média dos valores:
+     🔸 Se a média for maior que 127.5 → bloco recebe 255 (branco).
+     🔸 Caso contrário → bloco recebe 0 (preto).
+   - Isso reduz a matriz de tamanho (H, W) para (H//block_size, W//block_size).
+
+6️⃣ **Visualização dos Resultados**
+   - Exibe lado a lado:
+     🔸 A imagem original.
+     🔸 A imagem suavizada.
+     🔸 A imagem binarizada.
+     🔸 A imagem reduzida.
+   - Permite comparar as transformações em cada etapa.
+
+7️⃣ **Salvamento dos Dados**
+   - As matrizes binarizadas e reduzidas são salvas em arquivos `.npy`.
+   - Esses arquivos são então compactados em `.zip`:
+     - `matrizes_binarizadas_tcc.zip`
+     - `matrizes_reduzidas_tcc.zip`
+   - Após compactar, os arquivos `.npy` são removidos do diretório para economia de espaço.
+"""
 zip_path_original = 'matrizes_tcc.zip'
 zip_path_suavizadas = 'matrizes_suavizadas_tcc.zip'
 

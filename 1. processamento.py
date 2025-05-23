@@ -5,6 +5,57 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import zipfile
 
+"""
+Este código realiza um pipeline completo de processamento de imagens. 
+Ele foi desenvolvido para ler imagens de uma pasta, pré-processá-las e 
+gerar saídas prontas para serem utilizadas em treinamentos de modelos, 
+análises ou compressões.
+
+✔️ FUNCIONALIDADES DO CÓDIGO:
+1️⃣ **Contagem e listagem de imagens na pasta**
+   ➤ Filtra apenas arquivos de imagem (formatos: png, jpg, jpeg, bmp).
+
+2️⃣ **Verificação dos tamanhos das imagens**
+   ➤ Identifica se as imagens possuem tamanhos diferentes.
+
+3️⃣ **Padronização de formato**
+   ➤ Converte todas as imagens da pasta para formato JPG em escala de cinza.
+
+4️⃣ **Conversão para matrizes NumPy**
+   ➤ Cada imagem é convertida em uma matriz, onde cada elemento representa a 
+      intensidade de cinza (valores de 0 a 255).
+
+5️⃣ **Zero Padding**
+   ➤ Adiciona uma borda de zeros nas imagens (tamanho configurável) para 
+      preservar as bordas durante operações de filtragem.
+
+6️⃣ **Filtro de Média**
+   ➤ Aplica uma máscara NxN para suavizar a imagem, reduzindo ruídos. 
+      A média da vizinhança de cada pixel substitui o valor do pixel central.
+
+7️⃣ **Cálculo de estatísticas**
+   ➤ Mede a média e o desvio padrão da imagem original e da suavizada.
+
+8️⃣ **Binarização**
+   ➤ Converte a imagem suavizada para uma imagem binária (preto e branco), 
+      utilizando um limiar adaptativo calculado como:
+      ➤ limiar = média + (5 * desvio padrão)
+
+9️⃣ **Exibição dos resultados**
+   ➤ Mostra a imagem original, suavizada e binarizada lado a lado.
+   ➤ Mostra também o histograma de intensidades da imagem suavizada.
+
+🔟 **Salvamento dos dados**
+   ➤ As matrizes das imagens originais e suavizadas são salvas em arquivos `.npy`.
+   ➤ Esses arquivos são compactados em `.zip` para fácil armazenamento e transporte.
+   ➤ Após compactar, os arquivos `.npy` são apagados do diretório para não ocupar espaço extra.
+
+⚙️ PARÂMETROS CONFIGURÁVEIS:
+- `pasta_imagens` → caminho onde estão as imagens.
+- `size_padding` → tamanho do zero padding aplicado nas bordas (ex.: 1, 2...).
+- `filtro_size` → tamanho da máscara do filtro de média (ex.: 3x3, 5x5...).
+
+"""
 ##################################
 # Contar imagens na pasta
 ##################################
