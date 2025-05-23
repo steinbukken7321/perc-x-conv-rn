@@ -6,6 +6,7 @@ from PIL import Image
 import zipfile
 
 """
+🔹 Objetivo:
 Este código realiza um pipeline completo de processamento de imagens. 
 Ele foi desenvolvido para ler imagens de uma pasta, pré-processá-las e 
 gerar saídas prontas para serem utilizadas em treinamentos de modelos, 

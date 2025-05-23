@@ -7,7 +7,10 @@ import os
 
 """
 🔹 Objetivo:
-Este código realiza o processamento de um conjunto de matrizes (imagens) armazenadas em arquivos `.npy` compactados em arquivos `.zip`. O processamento envolve análise estatística, binarização e redução das matrizes, além de visualização e salvamento dos resultados.
+Este código realiza o processamento de um conjunto de matrizes 
+(imagens) armazenadas em arquivos `.npy` compactados em arquivos `.zip`. 
+O processamento envolve análise estatística, binarização e 
+redução das matrizes, além de visualização e salvamento dos resultados.
 
 🔹 Etapas do Processamento:
 
