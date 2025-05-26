@@ -224,7 +224,7 @@ matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiar)
 block_size = 2  # bloco 2x2 = 4 (reduz 4 pixeis para 1)
 matrizes_reduzidas = reduzir_com_mascara(matrizes_binarizadas[0], block_size)
 
-'''
+
 # 📋 Impressão de resultados
 print(f"🎯 Desvio padrão da matriz original: {desvio_padrao_original:.2f}")
 print(f"🎯 Desvio padrão da matriz suavizada: {desvio_padrao:.2f}")
@@ -242,9 +242,8 @@ print("Formato da matriz binarizada:", matrizes_binarizadas[0].shape)
 exibir_histograma(matrizes[0], matrizes_suavizadas[0])
 
 # 📊 Plot: imagem original, suavizada e binarizada
- exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0])
- 
-'''
+exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0])
+
 # 📊 Plot: imagem original, suavizada, binarizada e reduzida
 exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0], matrizes_reduzidas[0])
 

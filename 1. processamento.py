@@ -361,3 +361,16 @@ salvar_matrizes(npy_path_suavizadas, matrizes_suavizadas)
 compactar_npy(npy_path_suavizadas, zip_path_suavizadas)
 os.remove(npy_path_suavizadas)
 
+"""
+📂 Total de imagens: 24
+📐 Tamanho original da matriz: 3000x2000   
+📐 Tamanho após zero padding: 3002x2002    
+🎯 Desvio padrão da matriz original: 32.02 
+📊 Média da matriz original: 51.97
+📊 Média da matriz suavizada: 51.41
+⏳ Tempo total de execução: 2212.47 segundos
+Matrizes salvas em matrizes_tcc.npy
+Arquivo compactado salvo como matrizes_tcc.zip
+Matrizes salvas em matrizes_suavizadas_tcc.npy
+Arquivo compactado salvo como matrizes_suavizadas_tcc.zip
+"""
