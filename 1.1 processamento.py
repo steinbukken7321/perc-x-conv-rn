@@ -6,7 +6,7 @@ import zipfile
 import os
 
 """
-🔹 Objetivo:
+
 Este código realiza o processamento de um conjunto de matrizes 
 (imagens) armazenadas em arquivos `.npy` compactados em arquivos `.zip`. 
 O processamento envolve análise estatística, binarização e 
@@ -243,6 +243,7 @@ exibir_histograma(matrizes[0], matrizes_suavizadas[0])
 
 # 📊 Plot: imagem original, suavizada e binarizada
  exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0])
+ 
 '''
 # 📊 Plot: imagem original, suavizada, binarizada e reduzida
 exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0], matrizes_reduzidas[0])

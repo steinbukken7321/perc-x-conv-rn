@@ -6,7 +6,7 @@ from PIL import Image
 import zipfile
 
 """
-🔹 Objetivo:
+
 Este código realiza um pipeline completo de processamento de imagens. 
 Ele foi desenvolvido para ler imagens de uma pasta, pré-processá-las e 
 gerar saídas prontas para serem utilizadas em treinamentos de modelos, 
@@ -37,16 +37,12 @@ análises ou compressões.
 7️⃣ **Cálculo de estatísticas**
    ➤ Mede a média e o desvio padrão da imagem original e da suavizada.
 
-8️⃣ **Binarização**
-   ➤ Converte a imagem suavizada para uma imagem binária (preto e branco), 
-      utilizando um limiar adaptativo calculado como:
-      ➤ limiar = média + (5 * desvio padrão)
 
-9️⃣ **Exibição dos resultados**
-   ➤ Mostra a imagem original, suavizada e binarizada lado a lado.
+8️⃣ **Exibição dos resultados**
+   ➤ Mostra a imagem original, suavizada lado a lado.
    ➤ Mostra também o histograma de intensidades da imagem suavizada.
 
-🔟 **Salvamento dos dados**
+9️⃣ **Salvamento dos dados**
    ➤ As matrizes das imagens originais e suavizadas são salvas em arquivos `.npy`.
    ➤ Esses arquivos são compactados em `.zip` para fácil armazenamento e transporte.
    ➤ Após compactar, os arquivos `.npy` são apagados do diretório para não ocupar espaço extra.
@@ -232,22 +228,12 @@ Resumo p/ exemplo:
 
 
 ##################################
-# Binarizar matrizes suavizadas
-##################################
-def binarizar_matrizes(matrizes, limiar=128):
-    binarizadas = []
-    for matriz in matrizes:
-        binaria = (matriz >= limiar).astype(np.uint8) * 255  # 0 ou 255
-        binarizadas.append(binaria)
-    return binarizadas
-
-##################################
 # Exibir imagens
 ##################################
-def exibir_imagens(originais, suavizadas, binarizadas):
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
-    titulos = ["Original", "Suavizada", "Binarizada"]
-    imagens = [originais, suavizadas, binarizadas]
+def exibir_imagens(originais, suavizadas):
+    fig, axes = plt.subplots(1, 2, figsize=(18, 5))
+    titulos = ["Original", "Suavizada"]
+    imagens = [originais, suavizadas]
     
     for ax, img, titulo in zip(axes, imagens, titulos):
         ax.imshow(img, cmap='gray')
@@ -302,10 +288,10 @@ filtro_size = 3              # ➤ Tamanho da máscara do filtro de média (ex: 
 ##############################################
 # PROCESSAMENTO DAS IMAGENS
 ##############################################
-'''
+
 # ⏱️ Início do temporizador
 tempo_inicio = time.time()
-'''
+
 # 📸 Contagem de imagens e padronização de formatos
 quantidade, _ = contareler_imagens(pasta_imagens)
 padronizar_formatos(pasta_imagens)
@@ -327,23 +313,16 @@ desvio_padrao = calcular_desvio_padrao(matrizes_suavizadas[0])
 desvio_padrao_original = calcular_desvio_padrao(matrizes[0])
 
 
-limiar = 5 * desvio_padrao + media  # ➤ Limiar para binarização (0 a 255)
-
-# ⬛ Binarização das matrizes suavizadas com base no limiar
-matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiar)
-
 
 # 📏 Obtenção e exibição dos tamanhos das matrizes (original e com padding)
 tamanho_original = obter_tamanho_matriz(matrizes[0])
 tamanho_padded = obter_tamanho_matriz(padded_matrices[0])
 
 
-
-'''
 # ⏱️ Fim do temporizador e cálculo do tempo total
 tempo_fim = time.time()
 tempo_total = tempo_fim - tempo_inicio
-'''
+
 # 📋 Impressão de resultados
 print(f"📂 Total de imagens: {quantidade}")
 
@@ -356,23 +335,15 @@ print(f"🎯 Desvio padrão da matriz suavizada: {desvio_padrao:.2f}")
 print(f"📊 Média da matriz original: {media_original:.2f}")
 print(f"📊 Média da matriz suavizada: {media:.2f}")
 
-print(f"📐 Limiar: 3*{desvio_padrao:.2f} + {media:.2f} = {limiar:.2f}")
-
-
 
 # 📊 Plot: histograma da matriz suavizada
 exibir_histograma(matrizes_suavizadas[0])
-# 📊 Plot: imagem original, suavizada e binarizada
-exibir_imagens(matrizes[0], matrizes_suavizadas[0], matrizes_binarizadas[0])
+# 📊 Plot: imagem original e suavizada
+exibir_imagens(matrizes[0], matrizes_suavizadas[0])
 
-
-
-'''
 print(f"⏳ Tempo total de execução: {tempo_total:.2f} segundos")
 
 
-
-'''
 
 # 💾 Salvamento das matrizes (lidas do zip) em arquivo .npy
 npy_path_matrizes = "matrizes_tcc.npy"
