@@ -17,8 +17,6 @@ arquivo_matrizes = "matrizes_suavizadas_tcc.npy"
 ##############################################
 # Função de ativação e derivada (Sigmoid)
 ##############################################
-
-
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -29,16 +27,12 @@ def derivada_sigmoid(x):
 ##############################################
 # Carregar matrizes suavizadas do arquivo
 ##############################################
-
-
 def carregar_matrizes(caminho):
     return np.load(caminho)
 
 ##############################################
 # Geração das janelas e rótulos (dataset)
 ##############################################
-
-
 def gerar_dados_treino(matrizes, tamanho_janela, limiar_alvo):
     X = []
     y = []
@@ -58,8 +52,6 @@ def gerar_dados_treino(matrizes, tamanho_janela, limiar_alvo):
 ##############################################
 # Inicialização de pesos
 ##############################################
-
-
 def inicializar_pesos(entrada, camadas_ocultas, saida):
     pesos = []
     # entrada -> oculta1
@@ -76,8 +68,6 @@ def inicializar_pesos(entrada, camadas_ocultas, saida):
 ##############################################
 # Feedforward
 ##############################################
-
-
 def feedforward(x, pesos):
     ativacoes = [x]
     entrada = x
@@ -90,10 +80,8 @@ def feedforward(x, pesos):
     return ativacoes
 
 ##############################################
-# Backpropagation (1 saída)
+# Backpropagation
 ##############################################
-
-
 def backpropagation(pesos, ativacoes, y_real):
     gradientes = [None] * len(pesos)
     erro = ativacoes[-1] - y_real
@@ -109,8 +97,6 @@ def backpropagation(pesos, ativacoes, y_real):
 ##############################################
 # Treinamento
 ##############################################
-
-
 def treinar(X, y, pesos, epocas):
     for epoca in range(epocas):
         ativacoes = feedforward(X, pesos)
@@ -127,8 +113,6 @@ def treinar(X, y, pesos, epocas):
 ##############################################
 # Contar alvos detectados na imagem de teste
 ##############################################
-
-
 def contar_alvos(matriz_teste, pesos, tamanho_janela, limiar):
     pad = tamanho_janela // 2
     contagem = 0
@@ -145,8 +129,6 @@ def contar_alvos(matriz_teste, pesos, tamanho_janela, limiar):
 ##############################################
 # Execução
 ##############################################
-
-
 if __name__ == "__main__":
     print("🔍 Carregando matrizes...")
     matrizes = carregar_matrizes(arquivo_matrizes)
