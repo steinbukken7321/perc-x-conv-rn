@@ -241,12 +241,8 @@ print("Formato da matriz binarizada:", matrizes_binarizadas[0].shape)
 # 📊 Plot: histograma da matriz original
 exibir_histograma(matrizes[0], matrizes_suavizadas[0])
 
-# 📊 Plot: imagem original, suavizada e binarizada
-exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0])
-
 # 📊 Plot: imagem original, suavizada, binarizada e reduzida
 exibir_imagens(matrizes[0][0], matrizes_suavizadas[0][0], matrizes_binarizadas[0][0], matrizes_reduzidas[0])
-
 
 
 # 💾 Salvamento das matrizes binarizadas em arquivo .npy
