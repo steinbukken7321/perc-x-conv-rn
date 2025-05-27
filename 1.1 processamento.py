@@ -261,3 +261,17 @@ zip_path_reduzidas = "matrizes_reduzidas_tcc.zip"
 salvar_matrizes(npy_path_reduzidas, matrizes_reduzidas)
 compactar_npy(npy_path_reduzidas, zip_path_reduzidas)
 os.remove(npy_path_reduzidas)
+
+"""
+
+🎯 Desvio padrão da matriz original: 32.83
+🎯 Desvio padrão da matriz suavizada: 25.30
+🎯 Desvio padrão da matriz original com função manual: 32.83 
+🎯 Desvio padrão da matriz suavizada com função manual: 25.30
+📐 Limiar: 6*25.30 + 50.49 = 202.29
+Formato da matriz binarizada: (24, 3002, 2002)
+Matrizes salvas em matrizes_binarizadas_tcc.npy
+Arquivo compactado salvo como matrizes_binarizadas_tcc.zip
+Arquivo compactado salvo como matrizes_reduzidas_tcc.zip
+
+"""
