@@ -17,20 +17,5 @@ def carregar_matrizes_de_zip(caminho_zip):
                 matrizes.append(matriz)
     return matrizes
 
-arquivo_zip = "matrizes_reduzidas_tcc.zip"
-
-idx = 0  # índice da imagem para teste
-imagem = X[idx]
-threshold = 0.5
-
-binaria = imagem > (threshold * np.max(imagem))
-
-plt.subplot(1, 2, 1)
-plt.imshow(imagem, cmap='gray')
-plt.title('Imagem Original')
-
-plt.subplot(1, 2, 2)
-plt.imshow(binaria, cmap='gray')
-plt.title('Imagem Binarizada')
-
-plt.show()
+arquivo_zip1 = "matrizes_reduzidas_tcc.zip"
+arquivo_zip2 = "matrizes_binarizadas_tcc.zip"
