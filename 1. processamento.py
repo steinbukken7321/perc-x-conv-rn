@@ -343,7 +343,9 @@ exibir_imagens(matrizes[0], matrizes_suavizadas[0])
 
 print(f"⏳ Tempo total de execução: {tempo_total:.2f} segundos")
 
-
+# verificar formato de grupos de imagens
+print(matrizes)
+print(np.array(matrizes_suavizadas).shape)
 
 # 💾 Salvamento das matrizes (lidas do zip) em arquivo .npy
 npy_path_matrizes = "matrizes_tcc.npy"
