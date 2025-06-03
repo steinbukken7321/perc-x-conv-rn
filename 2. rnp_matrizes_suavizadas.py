@@ -6,16 +6,33 @@ import matplotlib.pyplot as plt
 ##############################################
 # Carregar matrizes do ZIP
 ##############################################
+zip_path_binarizadas = "matrizes_binarizadas_tcc.zip"
+zip_path_reduzidas = "matrizes_reduzidas_tcc.zip"
 
-def carregar_matrizes_de_zip(caminho_zip):
-    matrizes = []
-    with zipfile.ZipFile(caminho_zip, 'r') as zip_ref:
-        npy_arquivos = [nome for nome in zip_ref.namelist() if nome.endswith('.npy')]
-        for nome in npy_arquivos:
-            with zip_ref.open(nome) as arquivo:
-                matriz = np.load(io.BytesIO(arquivo.read()))
-                matrizes.append(matriz)
-    return matrizes
+matrizes_binarizadas = []
+matrizes_reduzidas = []
 
-arquivo_zip1 = "matrizes_reduzidas_tcc.zip"
-arquivo_zip2 = "matrizes_binarizadas_tcc.zip"
+# Abrir matrizes binarizadas
+with zipfile.ZipFile(zip_path_binarizadas, 'r') as zip_ref:
+    npy_arquivos = [nome for nome in zip_ref.namelist()
+                    if nome.endswith('.npy')]
+    for nome in npy_arquivos:
+        with zip_ref.open(nome) as arquivo:
+            matriz = np.load(io.BytesIO(arquivo.read()))
+            matrizes_binarizadas.append(matriz)
+
+# Abrir matrizes reduzidas
+with zipfile.ZipFile(zip_path_reduzidas, 'r') as zip_ref:
+    npy_arquivos = [nome for nome in zip_ref.namelist()
+                    if nome.endswith('.npy')]
+    for nome in npy_arquivos:
+        with zip_ref.open(nome) as arquivo:
+            matriz = np.load(io.BytesIO(arquivo.read()))
+            matrizes_reduzidas.append(matriz)
+
+# formato
+
+print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_binarizadas).shape}")
+print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_reduzidas).shape}")
+
+

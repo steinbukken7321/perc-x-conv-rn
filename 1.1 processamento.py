@@ -272,7 +272,8 @@ print(f"Formato da lista das matrizes binarizadas: {matrizes_binarizadas.shape}"
 #print(matrizes_binarizadas.shape)  # Verifique se ficou (24, x, y)
 print("Formato da matriz binarizada:", matrizes_binarizadas[0].shape)
 print("Formato da matriz reduzidas:", matrizes_reduzidas[0].shape)
-print(f"Formato da lista das matrizes binarizadas: {matrizes_reduzidas.shape}")
+
+print(f"Formato da lista das matrizes reduzidas: {matrizes_reduzidas.shape}")
 #print(matrizes_reduzidas.shape)  # Verifique se ficou (24, x, y)
 print("Formato da matriz binarizada:", matrizes_reduzidas[0].shape)
 print("Formato da matriz reduzidas:", matrizes_reduzidas[0].shape)
@@ -303,31 +304,18 @@ compactar_npy(npy_path_reduzidas, zip_path_reduzidas)
 os.remove(npy_path_reduzidas)
 
 """
-(1, 24, 3000, 2000)
-(1, 24, 3002, 2002)
-(1, 24, 3002, 2002)
-(1, 24, 1501, 1001)
-🎯 Desvio padrão da matriz original: 32.83 
-🎯 Desvio padrão da matriz suavizada: 25.30
-📊 Média da matriz original: 51.05
-📊 Média da matriz suavizada: 50.49        
-📐 Limiar: 5*25.30 + 50.49 = 176.99
-Formato da lista matrizes binarizada: (1, 24, 3002, 2002)
-Formato da matriz binarizada: (24, 3002, 2002)
-Formato da matriz reduzidas: (24, 1501, 1001)
-Formato da lista matrizes reduzidas: (1, 24, 1501, 1001)
-Formato da matriz binarizada: (24, 1501, 1001)
-Formato da matriz reduzidas: (24, 1501, 1001)
-"""
-
-"""
+Formato da lista das matrizes original: (1, 24, 3000, 2000)
+Formato da lista das matrizes suavizdas: (1, 24, 3002, 2002)
 🎯 Desvio padrão da matriz original: 32.83
 🎯 Desvio padrão da matriz suavizada: 25.30
-🎯 Desvio padrão da matriz original com função manual: 32.83
-🎯 Desvio padrão da matriz suavizada com função manual: 25.30
-📐 Limiar: 5*25.30 + 50.49 = 202.29
+📊 Média da matriz original: 51.05
+📊 Média da matriz suavizada: 50.49
+📐 Limiar: 5*25.30 + 50.49 = 176.99
+Formato da lista das matrizes binarizadas: (1, 24, 3002, 2002)
 Formato da matriz binarizada: (24, 3002, 2002)
-Matrizes salvas em matrizes_binarizadas_tcc.npy
+Formato da lista das matrizes reduzidas [0]: (1, 24, 1501, 1001)
+Formato da matriz reduzidas [0]: (24, 1501, 1001)
 Arquivo compactado salvo como matrizes_binarizadas_tcc.zip
+Matrizes salvas em matrizes_reduzidas_tcc.npy
 Arquivo compactado salvo como matrizes_reduzidas_tcc.zip
 """
