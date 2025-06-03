@@ -36,9 +36,14 @@ print(f"Formato das matrizes reduzidas: {matrizes_reduzidas.shape}")
 
 
 # acessar qualquer matriz(img) da lista matrizes_reduzida
-"""
+
 plt.imshow(matrizes_binarizadas[0][14], cmap='gray')
 plt.title('Imagem 1')
 plt.axis('off')
 plt.show()
-"""
+
+
+plt.imshow(matrizes_reduzidas[0][14], cmap='gray')
+plt.title('Imagem 1')
+plt.axis('off')
+plt.show()

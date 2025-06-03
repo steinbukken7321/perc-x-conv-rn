@@ -12,55 +12,6 @@ Este código realiza o processamento de um conjunto de matrizes
 O processamento envolve análise estatística, binarização e
 redução das matrizes, além de visualização e salvamento dos resultados.
 
-🔹 Etapas do Processamento:
-
-1️⃣ **Carregamento das Matrizes**
-   - As matrizes são carregadas a partir de dois arquivos `.zip`:
-     - `matrizes_tcc.zip` → matrizes originais.
-     - `matrizes_suavizadas_tcc.zip` → matrizes suavizadas.
-   - Os arquivos `.npy` dentro dos `.zip` são extraídos e carregados como arrays NumPy.
-
-2️⃣ **Análise Estatística**
-   - Calcula-se:
-     - A média das intensidades dos pixels.
-     - O desvio padrão de duas formas:
-       🔸 Usando a função `np.std()`.
-       🔸 De forma manual, implementando o cálculo matemático do desvio padrão.
-   - Essa análise é feita para comparar a matriz original com a suavizada.
-
-3️⃣ **Exibição de Histogramas**
-   - Gera histogramas das distribuições de intensidade dos pixels das matrizes original e suavizada.
-   - Permite visualizar a dispersão dos valores e os efeitos da suavização.
-
-4️⃣ **Binarização das Matrizes**
-   - As matrizes suavizadas são transformadas em imagens binárias (preto e branco).
-   - Um **limiar (threshold)** é definido como:
-     ```
-     limiar = 5 * desvio_padrao + media
-     ```
-   - Pixels com valor maior ou igual ao limiar recebem o valor 255 (branco) e os demais recebem 0 (preto).
-
-5️⃣ **Redução das Matrizes (Compressão por Blocos)**
-   - As imagens binarizadas são reduzidas em resolução utilizando uma máscara de blocos.
-   - Para cada bloco (ex.: 2x2 pixels), calcula-se a média dos valores:
-     🔸 Se a média for maior que 127.5 → bloco recebe 255 (branco).
-     🔸 Caso contrário → bloco recebe 0 (preto).
-   - Isso reduz a matriz de tamanho (H, W) para (H//block_size, W//block_size).
-
-6️⃣ **Visualização dos Resultados**
-   - Exibe lado a lado:
-     🔸 A imagem original.
-     🔸 A imagem suavizada.
-     🔸 A imagem binarizada.
-     🔸 A imagem reduzida.
-   - Permite comparar as transformações em cada etapa.
-
-7️⃣ **Salvamento dos Dados**
-   - As matrizes binarizadas e reduzidas são salvas em arquivos `.npy`.
-   - Esses arquivos são então compactados em `.zip`:
-     - `matrizes_binarizadas_tcc.zip`
-     - `matrizes_reduzidas_tcc.zip`
-   - Após compactar, os arquivos `.npy` são removidos do diretório para economia de espaço.
 """
 zip_path_original = 'matrizes_tcc.zip'
 zip_path_suavizadas = 'matrizes_suavizadas_tcc.zip'
@@ -150,13 +101,24 @@ def calcular_desvio_padrao_manual(matriz):
 # Binarizar matrizes suavizadas
 ##################################
 
+def binarizar_matrizes(matrizes, limiares):
+    """
+    Binariza cada matriz da lista com seu respectivo limiar, gerando valores 0 e 255.
+    
+    Args:
+        matrizes (array): shape (N, altura, largura)
+        limiares (list ou array): lista de limiares de tamanho N
+    
+    Retorna:
+        Array binarizado com valores 0 e 255, shape (N, altura, largura)
+    """
+    matrizes_binarizadas = []
 
-def binarizar_matrizes(matrizes_suavizadas, limiar):
-    binarizadas = []
-    for matriz in matrizes_suavizadas:
-        binaria = (matriz >= limiar).astype(np.uint8) * 255  # 0 ou 255
-        binarizadas.append(binaria)
-    return binarizadas
+    for i, matriz in enumerate(matrizes):
+        binarizada = np.where(matriz >= limiares[i], 255, 0)
+        matrizes_binarizadas.append(binarizada)
+
+    return np.array(matrizes_binarizadas, dtype=np.uint8)
 
 
 ##################################
@@ -167,8 +129,6 @@ def binarizar_matrizes(matrizes_suavizadas, limiar):
     binary_images: array numpy no formato (n_imagens, altura, largura)
     Retorna: array numpy no formato (n_imagens, altura//block_size, largura//block_size)
     """
-
-
 def reduzir_com_mascara(binary_images, block_size):
     n_batches, n_imagens, h, w = binary_images.shape
 
@@ -186,7 +146,7 @@ def reduzir_com_mascara(binary_images, block_size):
                     block = binary_images[b, idx, i*block_size:(
                         i+1)*block_size, j*block_size:(j+1)*block_size]
                     reduced_images[b, idx, i, j] = 255 if np.mean(
-                        block) > 127.5 else 0
+                        block) > ((255+255)/4) else 0
 
     return reduced_images
 
@@ -232,23 +192,32 @@ def compactar_npy(nome_arquivo_npy, nome_zip):
 
 
 # 📐 Médias
-media_original = np.mean(matrizes[0])
-media = np.mean(matrizes_suavizadas[0])
-
+# media_original = np.mean(matrizes[0])
+# media = np.mean(matrizes_suavizadas[0])
 # 📉 Cálculo do desvio padrão das matrizes originais e suavizadas
-desvio_padrao_original = calcular_desvio_padrao(matrizes[0])
-desvio_padrao = calcular_desvio_padrao(matrizes_suavizadas[0])
+# desvio_padrao_original = calcular_desvio_padrao(matrizes[0])
+# desvio_padrao = calcular_desvio_padrao(matrizes_suavizadas[0])
 #desvio_padrao_original_manual = calcular_desvio_padrao_manual(matrizes[0])
 #desvio_padrao_manual = calcular_desvio_padrao_manual(matrizes_suavizadas[0])
+# limiar = 5 * desvio_padrao + media  # ➤ Limiar para binarização (0 a 255)
 
-limiar = 5 * desvio_padrao + media  # ➤ Limiar para binarização (0 a 255)
+# 🧠 Cálculo das médias e desvios
+medias_suavizadas = [np.mean(m) for m in matrizes_suavizadas]
+desvios_suavizadas = [calcular_desvio_padrao(m) for m in matrizes_suavizadas]
+
+# 📐 Cálculo dos limiares
+limiares = [5 * desvios_suavizadas[i] + medias_suavizadas[i] for i in range(len(matrizes_suavizadas))]
 
 # ⬛ Binarização das matrizes suavizadas com base no limiar
-matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiar)
+matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiares)
 matrizes_binarizadas = np.array(matrizes_binarizadas)
 
 # 🔵 Definir o tamanho do bloco para redução
-block_size = 2  # bloco 2x2 = 4 (reduz 4 pixeis para 1)
+# block_size = 2  # bloco 2x2 = 4 (reduz 4 pixeis para 1)
+#matrizes_reduzidas = reduzir_com_mascara(matrizes_binarizadas, block_size)
+
+# 🔵 Reduzindo as matrizes binarizadas com blocos 2x2 usando média
+block_size = 2
 matrizes_reduzidas = reduzir_com_mascara(matrizes_binarizadas, block_size)
 
 # verificar formato de grupos de imagens
@@ -258,15 +227,9 @@ print(f"Formato da lista das matrizes original: {np.array(matrizes).shape}")
 print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_suavizadas).shape}")
 
 # 📋 Impressão de resultados
-print(f"🎯 Desvio padrão da matriz original: {desvio_padrao_original:.2f}")
-print(f"🎯 Desvio padrão da matriz suavizada: {desvio_padrao:.2f}")
-#print(f"🎯 Desvio padrão da matriz original com função manual: {desvio_padrao_original_manual:.2f}")
-#print(f"🎯 Desvio padrão da matriz suavizada com função manual: {desvio_padrao_manual:.2f}")
-
-print(f"📊 Média da matriz original: {media_original:.2f}")
-print(f"📊 Média da matriz suavizada: {media:.2f}")
-
-print(f"📐 Limiar: 5*{desvio_padrao:.2f} + {media:.2f} = {limiar:.2f}")
+print(f"🎯 Desvio padrão da matriz suavizada [0]: {desvios_suavizadas[0]:.2f}")
+print(f"📊 Média da matriz suavizada [0]: {medias_suavizadas[0]:.2f}")
+print(f"📐 Limiar [0]: 5 * {desvios_suavizadas[0]:.2f} + {medias_suavizadas[0]:.2f} = {limiares[0]:.2f}")
 
 print(f"Formato da lista das matrizes binarizadas: {matrizes_binarizadas.shape}")
 #print(matrizes_binarizadas.shape)  # Verifique se ficou (24, x, y)
@@ -304,19 +267,17 @@ compactar_npy(npy_path_reduzidas, zip_path_reduzidas)
 os.remove(npy_path_reduzidas)
 
 """
+Resultados:
 Formato da lista das matrizes original: (1, 24, 3000, 2000)
 Formato da lista das matrizes suavizdas: (1, 24, 3002, 2002)
-🎯 Desvio padrão da matriz original: 32.83
-🎯 Desvio padrão da matriz suavizada: 25.30
-📊 Média da matriz original: 51.05
-📊 Média da matriz suavizada: 50.49
-📐 Limiar: 5*25.30 + 50.49 = 176.99
+🎯 Desvio padrão da matriz suavizada [0]: 25.30
+📊 Média da matriz suavizada [0]: 50.49
+📐 Limiar [0]: 5 * 25.30 + 50.49 = 176.99
 Formato da lista das matrizes binarizadas: (1, 24, 3002, 2002)
-Formato da matriz binarizada [0]: (24, 3002, 2002)
+Formato da matriz binarizada: (24, 3002, 2002)
 Formato da lista das matrizes reduzidas: (1, 24, 1501, 1001)
-Formato da matriz reduzidas [0]: (24, 1501, 1001)
+Formato da matriz binarizada: (24, 1501, 1001)
 Matrizes salvas em matrizes_binarizadas_tcc.npy
 Arquivo compactado salvo como matrizes_binarizadas_tcc.zip
-Matrizes salvas em matrizes_reduzidas_tcc.npy
 Arquivo compactado salvo como matrizes_reduzidas_tcc.zip
 """
