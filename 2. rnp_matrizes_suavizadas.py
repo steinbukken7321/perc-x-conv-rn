@@ -36,3 +36,5 @@ print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_binarizadas)
 print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_reduzidas).shape}")
 
 
+
+

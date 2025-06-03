@@ -315,6 +315,7 @@ Formato da lista das matrizes binarizadas: (1, 24, 3002, 2002)
 Formato da matriz binarizada [0]: (24, 3002, 2002)
 Formato da lista das matrizes reduzidas: (1, 24, 1501, 1001)
 Formato da matriz reduzidas [0]: (24, 1501, 1001)
+Matrizes salvas em matrizes_binarizadas_tcc.npy
 Arquivo compactado salvo como matrizes_binarizadas_tcc.zip
 Matrizes salvas em matrizes_reduzidas_tcc.npy
 Arquivo compactado salvo como matrizes_reduzidas_tcc.zip
