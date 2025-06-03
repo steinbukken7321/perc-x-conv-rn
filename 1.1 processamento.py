@@ -312,8 +312,8 @@ Formato da lista das matrizes suavizdas: (1, 24, 3002, 2002)
 📊 Média da matriz suavizada: 50.49
 📐 Limiar: 5*25.30 + 50.49 = 176.99
 Formato da lista das matrizes binarizadas: (1, 24, 3002, 2002)
-Formato da matriz binarizada: (24, 3002, 2002)
-Formato da lista das matrizes reduzidas [0]: (1, 24, 1501, 1001)
+Formato da matriz binarizada [0]: (24, 3002, 2002)
+Formato da lista das matrizes reduzidas: (1, 24, 1501, 1001)
 Formato da matriz reduzidas [0]: (24, 1501, 1001)
 Arquivo compactado salvo como matrizes_binarizadas_tcc.zip
 Matrizes salvas em matrizes_reduzidas_tcc.npy
