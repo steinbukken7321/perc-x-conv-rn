@@ -75,7 +75,7 @@ axs[0].imshow(matrizes_reduzidas[0][0], cmap='gray')
 axs[0].set_title('Imagem Reduzida 1')
 axs[0].axis('off')
 
-axs[1].imshow(matrizes_esqueletos[0], cmap='gray')
+axs[1].imshow(matrizes_esqueletos[0][0], cmap='gray')
 axs[1].set_title('Esqueleto 1')
 axs[1].axis('off')
 
