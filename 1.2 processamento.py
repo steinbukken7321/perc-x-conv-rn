@@ -7,8 +7,6 @@ import os
 ##############################################
 # Carregar matrizes do ZIP
 ##############################################
-
-zip_path_binarizadas = "matrizes_binarizadas_tcc.zip"
 zip_path_reduzidas = "matrizes_reduzidas_tcc.zip"
 
 
@@ -55,7 +53,7 @@ def aplicar_filtro_esqueleto(matrizes_reduzidas, esqueleto):
                 # Verificar se corresponde exatamente ao esqueleto
                 if np.array_equal(vizinhanca, esqueleto):
                     # Zerar o pixel central na matriz original
-                    matrizes_reduzidas[i, y-1, x-1] = 0
+                    matrizes_reduzidas[i, y-1, x-1] = 255
                     
     return matrizes_reduzidas
 
@@ -95,8 +93,6 @@ def salvar_matrizes(nome_arquivo, matrizes):
 ##################################
 # Compactar em zip
 ##################################
-
-
 def compactar_npy(nome_arquivo_npy, nome_zip):
     with zipfile.ZipFile(nome_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
         zipf.write(nome_arquivo_npy)
@@ -106,8 +102,7 @@ def compactar_npy(nome_arquivo_npy, nome_zip):
 # PROCESSAMENTO DAS IMAGENS
 ##############################################
 
-# Carregar binarizadas e reduzidas
-# matrizes_binarizadas = carregar_matrizes_zip(zip_path_binarizadas)
+# Carregar reduzidas
 matrizes_reduzidas = carregar_matrizes_zip(zip_path_reduzidas)
 
 # Aplicar todos os filtros sequencialmente
@@ -116,29 +111,13 @@ for esqueleto in [esqueleto_vertical, esqueleto_horizontal,
     matrizes_esqueletos = aplicar_filtro_esqueleto(matrizes_reduzidas, esqueleto)
 
 # verificar formato das matrizes
-# print(f"Formato das matrizes binarizadas: {matrizes_binarizadas.shape}")
 print(f"Formato das matrizes reduzidas: {matrizes_reduzidas.shape}")
 print(f"Formato das matrizes esqueletos: {matrizes_esqueletos.shape}")
 
-# acessar qualquer matriz(img) em formato de img
-"""
-plt.imshow(matrizes_binarizadas[0][20], cmap='gray')
-plt.title('Imagem 1')
-plt.axis('off')
-plt.show()
-"""
-"""
-plt.imshow(matrizes_reduzidas[0][23], cmap='gray')
-plt.title('Imagem 1')
-plt.axis('off')
-plt.show()
-
-"""
 plt.imshow(matrizes_esqueletos[0], cmap='gray')
 plt.title('Imagem 1')
 plt.axis('off')
 plt.show()
-
 
 # 💾 Salvamento das matrizes esqueletos em arquivo .npy
 npy_path_esqueletos = "matrizes_esqueletos_tcc.npy"
