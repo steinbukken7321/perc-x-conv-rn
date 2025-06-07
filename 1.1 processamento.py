@@ -206,7 +206,7 @@ medias_suavizadas = [np.mean(m) for m in matrizes_suavizadas]
 desvios_suavizadas = [calcular_desvio_padrao(m) for m in matrizes_suavizadas]
 
 # 📐 Cálculo dos limiares
-limiares = [5.5 * desvios_suavizadas[i] + medias_suavizadas[i] for i in range(len(matrizes_suavizadas))]
+limiares = [5.8 * desvios_suavizadas[i] + medias_suavizadas[i] for i in range(len(matrizes_suavizadas))]
 
 # ⬛ Binarização das matrizes suavizadas com base no limiar
 matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiares)
@@ -272,7 +272,7 @@ Formato da lista das matrizes original: (1, 24, 3000, 2000)
 Formato da lista das matrizes suavizdas: (1, 24, 3002, 2002)
 🎯 Desvio padrão da matriz suavizada [0]: 25.30
 📊 Média da matriz suavizada [0]: 50.49
-📐 Limiar [0]: 5 * 25.30 + 50.49 = 176.99
+📐 Limiar [0]: 5.8 * 25.30 + 50.49 = 176.99
 Formato da lista das matrizes binarizadas: (1, 24, 3002, 2002)
 Formato da matriz binarizada: (24, 3002, 2002)
 Formato da lista das matrizes reduzidas: (1, 24, 1501, 1001)

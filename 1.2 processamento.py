@@ -3,6 +3,7 @@ import zipfile
 import io
 import matplotlib.pyplot as plt
 import os
+from scipy.ndimage import correlate
 
 ##############################################
 # Carregar matrizes do ZIP
@@ -20,25 +21,35 @@ def carregar_matrizes_zip(zip_path):
     matrizes = np.concatenate(matrizes, axis=0)
     return matrizes
 
-def aplicar_filtro_esqueleto(matrizes, esqueleto):
+##############################################
+# Aplicar filtro por correlação binária
+##############################################
+def aplicar_filtro_esqueleto_binario(matrizes, esqueleto):
     """
-    Aplica um filtro esqueleto nas matrizes.
+    Aplica um filtro esqueleto nas matrizes usando correlação binária.
     - matrizes: np.array com shape (b, n, h, w)
     - esqueleto: np.array 3x3
     """
     b, n, h, w = matrizes.shape
     resultado = matrizes.copy()
 
-    # Padding apenas nas dimensões espaciais
-    padded = np.pad(resultado, ((0, 0), (0, 0), (1, 1), (1, 1)), mode='constant')
+    # Criar kernel binário com os 255s do esqueleto como 1
+    kernel = (esqueleto == 255).astype(np.uint8)
+    soma_kernel = np.sum(kernel)
 
     for i in range(b):
         for j in range(n):
-            for y in range(1, h + 1):
-                for x in range(1, w + 1):
-                    vizinhanca = padded[i, j, y - 1:y + 2, x - 1:x + 2]
-                    if np.array_equal(vizinhanca, esqueleto):
-                        resultado[i, j, y - 1, x - 1] = 0
+            img = (resultado[i, j] == 255).astype(np.uint8)
+
+            # Aplicar correlação
+            resposta = correlate(img, kernel, mode='constant', cval=0)
+
+            # Localizar correspondências completas
+            correspondencias = (resposta == soma_kernel)
+
+            # Zerar os pixels correspondentes
+            resultado[i, j][correspondencias] = 0
+
     return resultado
 
 ##################################
@@ -87,14 +98,19 @@ matrizes_reduzidas = carregar_matrizes_zip(zip_path_reduzidas)
 print(f"Formato das matrizes reduzidas: {matrizes_reduzidas.shape}")
 
 # Aplicar filtros sequenciais
-matrizes_prefiltradas = matrizes_reduzidas.copy()
-for esqueleto in [esqueleto_vertical, esqueleto_horizontal, esqueleto_diagonal_principal, esqueleto_diagonal_secundaria]:
-    matrizes_filtradas = aplicar_filtro_esqueleto(matrizes_prefiltradas, esqueleto)
+matrizes_esqueletos = matrizes_reduzidas.copy()
+for esqueleto in [
+    esqueleto_vertical, 
+    esqueleto_horizontal, 
+    esqueleto_diagonal_principal, 
+    esqueleto_diagonal_secundaria
+]:
+    matrizes_esqueletos = aplicar_filtro_esqueleto_binario(matrizes_esqueletos, esqueleto)
 
-print(f"Formato das matrizes filtradas: {matrizes_filtradas.shape}")
+print(f"Formato das matrizes filtradas: {matrizes_esqueletos.shape}")
 
 # Visualizar uma das imagens
-plt.imshow(matrizes_filtradas[0, 0], cmap='gray')
+plt.imshow(matrizes_esqueletos[0, 0], cmap='gray')
 plt.title('Imagem 0 após filtros')
 plt.axis('off')
 plt.show()
@@ -103,6 +119,6 @@ plt.show()
 npy_path = "matrizes_esqueletos_tcc.npy"
 zip_path = "matrizes_esqueletos_tcc.zip"
 
-salvar_matrizes(npy_path, matrizes_filtradas)
+salvar_matrizes(npy_path, matrizes_esqueletos)
 compactar_npy(npy_path, zip_path)
 os.remove(npy_path)
