@@ -22,11 +22,39 @@ def carregar_matrizes_zip(zip_path):
     return matrizes
 
 ##############################################
+# Aplicar filtro por comparação direta
+##############################################
+def aplicar_filtro_esqueleto_direto(matrizes, esqueleto):
+    """
+    filtro esqueleto por comparação direta.
+    - matrizes: np.array com shape (b, n, h, w)
+    - esqueleto: np.array 3x3 com valores 0 ou 255
+    """
+    b, n, h, w = matrizes.shape
+    resultado = matrizes.copy()
+    
+    # Converter o esqueleto para binário
+    kernel_bin = (esqueleto == 255).astype(np.uint8)
+
+    for i in range(b):
+        for j in range(n):
+            img = (resultado[i, j] == 255).astype(np.uint8)
+            
+            # Varredura da imagem (evitar bordas)
+            for y in range(1, h - 1):
+                for x in range(1, w - 1):
+                    janela = img[y - 1:y + 2, x - 1:x + 2]
+                    if np.array_equal(janela, kernel_bin):
+                        resultado[i, j, y, x] = 0  # Zera o pixel central
+
+    return resultado
+
+##############################################
 # Aplicar filtro por correlação binária
 ##############################################
 def aplicar_filtro_esqueleto_binario(matrizes, esqueleto):
     """
-    Aplica um filtro esqueleto nas matrizes usando correlação binária.
+    filtro esqueleto nas matrizes usando correlação binária
     - matrizes: np.array com shape (b, n, h, w)
     - esqueleto: np.array 3x3
     """
@@ -109,12 +137,38 @@ for esqueleto in [
 
 print(f"Formato das matrizes filtradas: {matrizes_esqueletos.shape}")
 
-# Visualizar uma das imagens
-plt.imshow(matrizes_esqueletos[0, 0], cmap='gray')
-plt.title('Imagem 0 após filtros')
+matrizes_esqueletos2 = matrizes_reduzidas.copy()
+for esqueleto in [
+    esqueleto_vertical, 
+    esqueleto_horizontal, 
+    esqueleto_diagonal_principal, 
+    esqueleto_diagonal_secundaria
+]:
+    matrizes_esqueletos2 = aplicar_filtro_esqueleto_direto(matrizes_esqueletos2, esqueleto)
+print(f"Formato das matrizes filtradas: {matrizes_esqueletos2.shape}")
+
+# Visualizações
+plt.figure(figsize=(15, 4))
+
+plt.subplot(1, 3, 1)
+plt.imshow(matrizes_reduzidas[0, 0], cmap='gray')
+plt.title('Matrizes reduzidas')
 plt.axis('off')
+
+plt.subplot(1, 3, 3)
+plt.imshow(matrizes_esqueletos[0, 0], cmap='gray')
+plt.title('Correlacao binaria')
+plt.axis('off')
+
+plt.subplot(1, 3, 2)
+plt.imshow(matrizes_esqueletos2[0, 0], cmap='gray')
+plt.title('Comparacao direta')
+plt.axis('off')
+
+plt.tight_layout()
 plt.show()
 
+"""
 # Salvar e compactar
 npy_path = "matrizes_esqueletos_tcc.npy"
 zip_path = "matrizes_esqueletos_tcc.zip"
@@ -122,3 +176,4 @@ zip_path = "matrizes_esqueletos_tcc.zip"
 salvar_matrizes(npy_path, matrizes_esqueletos)
 compactar_npy(npy_path, zip_path)
 os.remove(npy_path)
+"""
