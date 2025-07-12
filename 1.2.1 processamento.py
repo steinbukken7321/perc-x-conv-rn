@@ -22,9 +22,9 @@ def carregar_matrizes_zip(zip_path):
     return matrizes
 
 ##############################################
-# Erosão e Dilatação separadas
+# Erosão
 ##############################################
-def aplicar_erosao(matrizes, tamanho_kernel=2):
+def aplicar_erosao(matrizes, tamanho_kernel=3):
     b, n, h, w = matrizes.shape
     estrutura = np.ones((tamanho_kernel, tamanho_kernel), dtype=bool)
     resultado = np.zeros_like(matrizes)
@@ -37,7 +37,10 @@ def aplicar_erosao(matrizes, tamanho_kernel=2):
 
     return resultado
 
-def aplicar_dilatacao(matrizes, tamanho_kernel=3):
+##############################################
+# Dilatação
+##############################################
+def aplicar_dilatacao(matrizes, tamanho_kernel=4):
     b, n, h, w = matrizes.shape
     estrutura = np.ones((tamanho_kernel, tamanho_kernel), dtype=bool)
     resultado = np.zeros_like(matrizes)
@@ -51,7 +54,7 @@ def aplicar_dilatacao(matrizes, tamanho_kernel=3):
     return resultado
 
 ##############################################
-# Filtro de esqueletos (remoção de rios)
+# Filtro de esqueletos 
 ##############################################
 def aplicar_filtro_esqueleto_binario(matrizes, esqueletos):
     b, n, h, w = matrizes.shape
