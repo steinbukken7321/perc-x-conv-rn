@@ -151,14 +151,13 @@ def reduzir_com_mascara(binary_images, block_size):
     return reduced_images
 
 ##################################
-# Exibir imagens (agora com 4 colunas)
+# Exibir imagens (agora com 2 colunas)
 ##################################
 
-
-def exibir_imagens(original, suavizada, binarizada, reduzida):
-    fig, axes = plt.subplots(1, 4, figsize=(16, 4))
-    titulos = ["Original", "Suavizada", "Binarizada", "Reduzida"]
-    imagens = [original, suavizada, binarizada, reduzida]
+def exibir_imagens(original, suavizada):
+    fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+    titulos = ["Original", "Suavizada"]
+    imagens = [original, suavizada]
 
     for ax, img, titulo in zip(axes, imagens, titulos):
         ax.imshow(img, cmap='gray')
@@ -169,6 +168,18 @@ def exibir_imagens(original, suavizada, binarizada, reduzida):
     plt.show()
 
 
+def exibir_imagens1(binarizada, reduzida):
+    fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+    titulos = ["Binarizada", "Reduzida"]
+    imagens = [binarizada, reduzida]
+
+    for ax, img, titulo in zip(axes, imagens, titulos):
+        ax.imshow(img, cmap='gray')
+        ax.set_title(titulo)
+        ax.axis('off')
+
+    plt.tight_layout()
+    plt.show()
 ##################################
 # Salvar matrizes em .npy
 ##################################
@@ -206,7 +217,7 @@ medias_suavizadas = [np.mean(m) for m in matrizes_suavizadas]
 desvios_suavizadas = [calcular_desvio_padrao(m) for m in matrizes_suavizadas]
 
 # 📐 Cálculo dos limiares
-limiares = [5.8 * desvios_suavizadas[i] + medias_suavizadas[i] for i in range(len(matrizes_suavizadas))]
+limiares = [5 * desvios_suavizadas[i] + medias_suavizadas[i] for i in range(len(matrizes_suavizadas))]
 
 # ⬛ Binarização das matrizes suavizadas com base no limiar
 matrizes_binarizadas = binarizar_matrizes(matrizes_suavizadas, limiares)
@@ -229,7 +240,7 @@ print(f"Formato da lista das matrizes suavizdas: {np.array(matrizes_suavizadas).
 # 📋 Impressão de resultados
 print(f"🎯 Desvio padrão da matriz suavizada [0]: {desvios_suavizadas[0]:.2f}")
 print(f"📊 Média da matriz suavizada [0]: {medias_suavizadas[0]:.2f}")
-print(f"📐 Limiar [0]: 5.5 * {desvios_suavizadas[0]:.2f} + {medias_suavizadas[0]:.2f} = {limiares[0]:.2f}")
+print(f"📐 Limiar [0]: 5 * {desvios_suavizadas[0]:.2f} + {medias_suavizadas[0]:.2f} = {limiares[0]:.2f}")
 
 print(f"Formato da lista das matrizes binarizadas: {matrizes_binarizadas.shape}")
 #print(matrizes_binarizadas.shape)  # Verifique se ficou (24, x, y)
@@ -246,8 +257,10 @@ exibir_histograma(matrizes[0], matrizes_suavizadas[0])
 
 # 📊 Plot: imagem original, suavizada, binarizada e reduzida
 exibir_imagens(matrizes[0][0],             # First image (3000, 2000)
-               matrizes_suavizadas[0][0],   # First smoothed image (3002, 2002)
-               matrizes_binarizadas[0][0],  # First binarized image (3002, 2002)
+               matrizes_suavizadas[0][0])   # First smoothed image (3002, 2002)
+
+# 📊 Plot: imagem original, suavizada, binarizada e reduzida
+exibir_imagens1(matrizes_binarizadas[0][0],  # First binarized image (3002, 2002)
                matrizes_reduzidas[0][0])    # First reduced image (1501, 1001)
 
 # 💾 Salvamento das matrizes binarizadas em arquivo .npy

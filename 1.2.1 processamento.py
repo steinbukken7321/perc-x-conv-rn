@@ -10,10 +10,12 @@ from scipy.ndimage import correlate, binary_erosion, binary_dilation
 ##############################################
 zip_path_reduzidas = "matrizes_reduzidas_tcc.zip"
 
+
 def carregar_matrizes_zip(zip_path):
     matrizes = []
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        npy_arquivos = [nome for nome in zip_ref.namelist() if nome.endswith('.npy')]
+        npy_arquivos = [nome for nome in zip_ref.namelist()
+                        if nome.endswith('.npy')]
         for nome in npy_arquivos:
             with zip_ref.open(nome) as arquivo:
                 matriz = np.load(io.BytesIO(arquivo.read()))
@@ -24,7 +26,9 @@ def carregar_matrizes_zip(zip_path):
 ##############################################
 # Erosão
 ##############################################
-def aplicar_erosao(matrizes, tamanho_kernel=3):
+
+
+def aplicar_erosao(matrizes, tamanho_kernel):
     b, n, h, w = matrizes.shape
     estrutura = np.ones((tamanho_kernel, tamanho_kernel), dtype=bool)
     resultado = np.zeros_like(matrizes)
@@ -40,7 +44,9 @@ def aplicar_erosao(matrizes, tamanho_kernel=3):
 ##############################################
 # Dilatação
 ##############################################
-def aplicar_dilatacao(matrizes, tamanho_kernel=4):
+
+
+def aplicar_dilatacao(matrizes, tamanho_kernel):
     b, n, h, w = matrizes.shape
     estrutura = np.ones((tamanho_kernel, tamanho_kernel), dtype=bool)
     resultado = np.zeros_like(matrizes)
@@ -54,8 +60,10 @@ def aplicar_dilatacao(matrizes, tamanho_kernel=4):
     return resultado
 
 ##############################################
-# Filtro de esqueletos 
+# Filtro de esqueletos
 ##############################################
+
+
 def aplicar_filtro_esqueleto_binario(matrizes, esqueletos):
     b, n, h, w = matrizes.shape
     resultado = matrizes.copy()
@@ -73,6 +81,7 @@ def aplicar_filtro_esqueleto_binario(matrizes, esqueletos):
 
     return resultado
 
+
 ##################################
 # Esqueletos
 ##################################
@@ -86,14 +95,18 @@ esqueletos = [
 ##################################
 # Salvar e compactar
 ##################################
+
+
 def salvar_matrizes(nome_arquivo, matrizes):
     np.save(nome_arquivo, np.array(matrizes))
     print(f"Matrizes salvas em {nome_arquivo}")
+
 
 def compactar_npy(nome_arquivo_npy, nome_zip):
     with zipfile.ZipFile(nome_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
         zipf.write(nome_arquivo_npy)
     print(f"Arquivo compactado salvo como {nome_zip}")
+
 
 ##################################
 # PROCESSAMENTO
@@ -102,18 +115,25 @@ def compactar_npy(nome_arquivo_npy, nome_zip):
 matrizes_reduzidas = carregar_matrizes_zip(zip_path_reduzidas)
 print(f"Formato das matrizes: {matrizes_reduzidas.shape}")
 
+
+# 5. Visualizações intermediárias
+plt.figure(figsize=(15, 4))
+plt.subplot(1, 3, 1)
+plt.imshow(matrizes_reduzidas[0, 0], cmap='gray')
+plt.title('Após redução')
+plt.axis('off')
+
 # 2. Aplicar erosão (rios somem)
-matrizes_erosao = aplicar_erosao(matrizes_reduzidas, tamanho_kernel=3)
+matrizes_erosao = aplicar_erosao(matrizes_reduzidas, tamanho_kernel=1)
 
 # 3. Aplicar filtros de esqueletos sobre imagens erodidas
 # matrizes_filtradas = aplicar_filtro_esqueleto_binario(matrizes_erosao, esqueletos)
 
 # 4. Aplicar dilatação separadamente (alvos expandem)
-matrizes_dilatacao = aplicar_dilatacao(matrizes_erosao, tamanho_kernel=3)
+matrizes_dilatacao = aplicar_dilatacao(matrizes_erosao, tamanho_kernel=4)
 
 # 5. Visualizações intermediárias
-plt.figure(figsize=(15, 4))
-plt.subplot(1, 3, 1)
+plt.subplot(1, 3, 2)
 plt.imshow(matrizes_erosao[0, 0], cmap='gray')
 plt.title('Após Erosão')
 plt.axis('off')
